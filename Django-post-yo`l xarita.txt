@@ -1,0 +1,201 @@
+
+
+
+1) django-admin startproject project .
+
+2) py manage.py startapp app
+
+3) settings.py + app + 
+MEDIA_URL = 'media/'
+MEDIA_ROOT = 'media'
+
+
+4) project / urls.py
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+
+5) app + template + blof(folder):
+template + base.html:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <title>
+        {% block title %}
+          Blog Sayt
+        {% endblock title %}
+    </title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="30" height="24" class="d-inline-block align-text-top">
+                Yangiliklar.uz
+              </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Asosiy</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">O'zbekiston</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Jahon</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Fan va Texnika</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Iqtisodiyot</a>
+              </li>
+            </ul>
+            <form class="d-flex">
+              <input class="form-control me-2" type="search" placeholder="Qidiruv.." aria-label="Search">
+              <button class="btn btn-outline-success bg-light" type="submit">Qidiruv</button>
+            </form>
+          </div>
+        </div>
+      </nav>
+
+
+      
+      {% block content %}
+          
+      {% endblock content %}
+          
+</body>
+</html>
+
+
+6) templates + asosiy.html:
+
+{% extends 'base.html' %}
+
+{% block title %}
+    Asosiy sahifa | {{block.super}}
+{% endblock title %}
+    
+
+
+7) views.py:
+
+def main(request):
+    return render(request,'blog/asosiy.html')
+
+8) py manage.py runserver
+
+9) models.py:
+
+from tabnanny import verbose
+from django.db import models
+
+class Post(models.Model):
+    sarlavha = models.CharField(max_length=200)
+    malumot = models.TextField()
+    rasm = models.ImageField(upload_to='post_image',null=True,blank=True)
+    video = models.FileField(upload_to='post_video',null=True,blank=True)
+    kurishlar = models.IntegerField(default=1)
+    def __str__(self):
+        return self.sarlavha
+   
+    class Meta:
+        verbose_name = "Post"
+        verbose_name_plural = "Postlar"
+
+10) admin.py:
+
+from .models import Post
+admin.site.register(Post)
+
+11) views.py:
+from models import Post
+postlar = Post.objects.all()
+    return render(request,'blog/asosiy.html',{"posts":postlar})
+
+12) asosiy.html:
+
+{% extends 'base.html' %}
+{% block title %}
+Asosiy sahifa | {{block.super}}
+{% endblock title %}
+{% block content %}
+<div class="row mt-3">
+    {% for post in postlar %}
+
+    <div class="col-sm-3 mt-5 ">
+        <div class="card h-10">
+            <img style="height: 250px;" src="{{post.rasm.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <hr>
+                <h5 class="card-title text-center"><b>{{post.sarlavha}}</b></h5>
+                <hr>
+	  <h5 class="card-title text-center"><b>{{post.malumot}}</b></h5>
+                <p class="card-text">{{post.kurishlar}}</p>
+                <a style="width: 100%;" href="#" class="btn btn-primary ">Batafsil</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endblock content %}
+
+
+13) blog + post_detail.html:
+
+
+{% extends 'base.html' %}
+{% block title %}
+Post ma'lumotlari | {{block.super}}
+{% endblock title %}
+{% block content %}
+<center>
+    <div class="col-sm-3 mt-5 ">
+        <div class="card h-10">
+            <img style="height: 250px;" src="{{post.rasm.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <hr>
+                <h5 class="card-title text-center"><b>{{post.sarlavha}}</b></h5>
+                <hr>
+                <p class="card-text">{{post.kurishlar}}</p>
+                <a style="width: 100%;" href="#" class="btn btn-primary ">Batafsil</a>
+            </div>
+        </div>
+    </div>
+</center>
+{% endblock content %}
+
+
+14) qidiruv uchun base.html:
+
+formda method="POST";
+name="qidiruv"
+
+15)  views.py:
+har bir def dan keyin:
+
+
+if request.method=="POST":
+        search = request.POST['qidiruv']
+        posts = Post.objects.filter(sarlavha__icontains=search)
+        return render(request,'blog/qidiruv.html',{"postlar":posts})
+
+
+
+16)
+
+
+
+
+
+    

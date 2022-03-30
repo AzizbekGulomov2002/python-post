@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}
+Ko'p kuzatilgan | {{block.super}}
+{% endblock title %}
+{% block content %}
+<div class="row mt-3">
+    {% for post in postlar %}
+
+    <div class="col-sm-3 mt-5 ">
+        <div class="card h-10">
+            <img style="height: 250px;" src="{{post.rasm.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <hr>
+                <h5 class="card-title text-center"><b>{{post.sarlavha}}</b></h5>
+                <hr>
+                <p class="card-text">{{post.kurishlar}}</p>
+                <a style="width: 100%;" href="/{{post.id}}" class="btn btn-primary ">Batafsil</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endblock content %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}
+Qidirilganlar | {{block.super}} 
+  
+{% endblock title %}
+{% block content %}
+  
+
+<div class="row mt-3">
+    {% for post  in posts %}
+      
+    
+  <div class="col-sm-4">
+    <div class="card">
+        <img src="{{post.rasm.url}}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">{{post.sarlavha}}</h5>
+        <p class="card-text">{{post.malumot}}</p>
+        <p class="card-text">{{post.kurishlar}}</p>
+       
+        <a href="/{{post.id}}" class="btn btn-primary">Batafsil</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  
+</div>
+{% endblock content %}

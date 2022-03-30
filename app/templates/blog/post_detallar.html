@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}
+Post ma'lumotlari | {{block.super}}
+{% endblock title %}
+{% block content %}
+
+
+<center>
+    <div class="col-sm-6 mt-5"><br>
+        <div class="card h-10">
+            <img style="height: 300px;" src="{{post.rasm.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <hr>
+                <h5 class="card-title text-center"><b>{{post.sarlavha}}</b></h5>
+                <hr>
+                <h5 class="card-title text-center"><b>{{post.malumot}}</b></h5>
+                <p class="card-text">{{post.kurishlar}}</p>
+                <a style="width: 100%;" href="/" class="btn btn-primary ">Asosiy</a>
+            </div>
+        </div>
+    </div>
+</center>
+
+
+{% endblock content %}
